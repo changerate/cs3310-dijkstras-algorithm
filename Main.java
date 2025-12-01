@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Scanner;
 import java.util.Set;
 
 
@@ -28,10 +29,39 @@ public class Main {
      *********************************************************/
     public static void main(String[] args) {
         String filename = "inputA"; // class file 
+        int u = -1, v = -1;
         if (args.length != 0)
-            filename = args[0];
+            // in the case where the user inputs just the filename
+        filename = args[0];
+
+
+        DijkstrasClass riverInstance = new DijkstrasClass(filename);
+        riverInstance.printOptimalGraph();
         
-        DijkstrasClass dijClass = new DijkstrasClass(filename);
+        //------------------------------------------
+        // Now let the user test routes between posts 
+        boolean contin = true; 
+        Scanner sc = new Scanner(System.in);
+        while (contin) { 
+            System.out.print("Test another post-to-post cost (y/n)? ");
+            String line = sc.nextLine(); 
+            if ("n".equals(line.toLowerCase())) {
+                contin = false;
+            }
+            else if ("y".equals(line.toLowerCase())) {
+                System.out.print("Choose the from and to posts, seperated by a space: ");
+                line = sc.nextLine(); 
+                String[] uv = line.trim().split("\\s+");
+                u = Integer.parseInt(uv[0]);
+                v = Integer.parseInt(uv[1]);
+
+                riverInstance.getOptimalRouteInfo(u, v);
+
+                // System.out.println("u and v: " + u + " " + v);
+            }
+        }
+
+        
         System.out.println("\n-------------------------------------------------");
     }
 }

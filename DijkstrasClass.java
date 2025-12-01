@@ -13,8 +13,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -37,14 +39,14 @@ public class DijkstrasClass {
         readFile(); // initialize information needed 
         // printGraph();
         applyDijkstras();
-        printDistAndParents();
+        // printDistAndParents();
     }
     
 
 
 
     private void applyDijkstras() { 
-        // for each row (source node), find the optimal cost to the next node 
+        // for each row (source node), use the Dijkstras Algorithm to find the optimal cost to the next node 
         for (int srcNode = 0; srcNode < numNodes-1; srcNode++) { 
             List<int[]> distAndParentsOneRow = dijkstrasAlgorithm(srcNode);
             distAndParents.add(distAndParentsOneRow);
@@ -153,21 +155,53 @@ public class DijkstrasClass {
     }
     
 
+    public void printOptimalGraph() { 
+        // TODO: THIS IS NOT THE OPTIMAL COST!
+        System.out.print(" ");
+        for (int i = 0; i < numNodes; i++) {
+            System.out.print(i + "   ");
+        }
+        System.out.println();
+        
+        for (int src = 0; src < numNodes; src++) {
+            // System.out.println("The list for source " + Integer.toString(src) + ": ");
+            System.out.print(src);
+            for (int i = 0; i < src+1; i++) {
+                System.out.print("    ");
+            }
+
+            for (Edge e : graph.get(src)) {
+                if (e.weight >= 100) { 
+                    System.out.print(e.weight + " ");
+                } else if (e.weight < 100 && e.weight >= 10) { 
+                    System.out.print(e.weight + "  ");
+                } else if (e.weight < 10) { 
+                    System.out.print(e.weight + "   ");
+                }
+            }
+            System.out.println();
+        }
+    }
+
+
     public void printIntArray(int[] arr) {
         for (int i = 0; i < arr.length; i++) {
             System.out.print(arr[i] + ",");
         }
+        System.out.println();
     }
-
-
+    
+    
     public void printBoolArray(boolean[] arr) {
         for (int i = 0; i < arr.length; i++) {
             System.out.print(arr[i] + ",");
         }
+        System.out.println();
     }
 
 
     public void printDistAndParents() {
+        System.out.println("----------------------------");
         for (int i = 0; i < distAndParents.size(); i++) {
             System.out.println("Source node " + i + ":");
             List<int[]> innerList = distAndParents.get(i);
@@ -181,7 +215,39 @@ public class DijkstrasClass {
             }
             System.out.println();
         }
+        System.out.println("----------------------------");
     }
+
+
+    public void printPath(int u, int v) {
+    }
+
+
+    public void getOptimalRouteInfo(int u, int v) { 
+        printDistAndParents();
+        int[] parents = distAndParents.get(u).get(1); // get the list of parents TO the node u
+        int parent = v;
+
+        int i = 0;
+        Deque<Integer> stack = new ArrayDeque<>();
+
+        for (; i < parents.length; i++) {
+            stack.push(parent);    
+            if (parents[parent] != -1) { 
+                parent = parents[parent];
+            } else {
+                i = parents.length;
+            }
+        }
+
+        while (!stack.isEmpty()) { 
+            System.out.print(stack.pop());
+            if (!stack.isEmpty())
+                System.out.print(" -> ");
+        }
+        System.out.println();
+    }
+
 
     //***************************************************************************/
     // SETTERS 
