@@ -55,7 +55,7 @@ public class Main {
                 u = Integer.parseInt(uv[0]);
                 v = Integer.parseInt(uv[1]);
 
-                riverInstance.getOptimalRouteInfo(u, v);
+                riverInstance.printOptimalRouteInfo(u, v);
 
                 // System.out.println("u and v: " + u + " " + v);
             }

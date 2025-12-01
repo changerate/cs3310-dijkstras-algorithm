@@ -141,7 +141,33 @@ public class DijkstrasClass {
 
 
 
-    
+    public void printOptimalRouteInfo(int u, int v) { 
+        printDistAndParents();
+        int[] parents = distAndParents.get(u).get(1); // get the list of parents TO the node u
+        int parent = v;
+
+        int i = 0;
+        Deque<Integer> stack = new ArrayDeque<>();
+
+        for (; i < parents.length; i++) {
+            stack.push(parent);    
+            if (parents[parent] != -1) { 
+                parent = parents[parent];
+            } else {
+                i = parents.length;
+            }
+        }
+
+        while (!stack.isEmpty()) { 
+            System.out.print(stack.pop());
+            if (!stack.isEmpty())
+                System.out.print(" -> ");
+        }
+        System.out.println();
+    }
+
+
+
     //***************************************************************************/
     // UTILITIES 
     //***************************************************************************/
@@ -153,7 +179,7 @@ public class DijkstrasClass {
             }
         }
     }
-    
+
 
     public void printOptimalGraph() { 
         // TODO: THIS IS NOT THE OPTIMAL COST!
@@ -222,31 +248,6 @@ public class DijkstrasClass {
     public void printPath(int u, int v) {
     }
 
-
-    public void getOptimalRouteInfo(int u, int v) { 
-        printDistAndParents();
-        int[] parents = distAndParents.get(u).get(1); // get the list of parents TO the node u
-        int parent = v;
-
-        int i = 0;
-        Deque<Integer> stack = new ArrayDeque<>();
-
-        for (; i < parents.length; i++) {
-            stack.push(parent);    
-            if (parents[parent] != -1) { 
-                parent = parents[parent];
-            } else {
-                i = parents.length;
-            }
-        }
-
-        while (!stack.isEmpty()) { 
-            System.out.print(stack.pop());
-            if (!stack.isEmpty())
-                System.out.print(" -> ");
-        }
-        System.out.println();
-    }
 
 
     //***************************************************************************/
