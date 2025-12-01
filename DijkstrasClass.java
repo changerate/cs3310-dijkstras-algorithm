@@ -10,17 +10,14 @@
 
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
-import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
-import java.util.Set;
 
 
 
@@ -142,12 +139,18 @@ public class DijkstrasClass {
 
 
     public void printOptimalRouteInfo(int u, int v) { 
+        if (u > numNodes || v > numNodes) {
+            System.out.println("u or v is not a node.");
+            return;
+        }
+        
+        int optimalDistance = distAndParents.get(u).get(0)[v];
         int[] parents = distAndParents.get(u).get(1); // get the list of parents TO node u
         int parent = v;
 
-        int i = 0;
         Deque<Integer> stack = new ArrayDeque<>();
-
+        
+        int i = 0;
         for (; i < parents.length; i++) {
             stack.push(parent);    
             if (parents[parent] != -1) { 
@@ -156,6 +159,9 @@ public class DijkstrasClass {
                 i = parents.length;
             }
         }
+
+        System.out.println("Optimal distance: " + optimalDistance);
+        System.out.print("Optimal path:     ");
 
         while (!stack.isEmpty()) { 
             System.out.print(stack.pop());
@@ -181,12 +187,14 @@ public class DijkstrasClass {
 
 
     public void printOptimalGraph() { 
+        System.out.println("\nOptimal Cost Matrix");
+        
         System.out.print(" ");
+
         for (int i = 0; i < numNodes; i++) {
             System.out.print(i + "   ");
         }
         System.out.println();
-
 
         for (int srcNode = 0; srcNode < distAndParents.size(); srcNode++) {
             int[] optimalArray = distAndParents.get(srcNode).get(0);
@@ -211,6 +219,8 @@ public class DijkstrasClass {
 
 
 
+    
+
     public void printIntArray(int[] arr) {
         for (int i = 0; i < arr.length; i++) {
             System.out.print(arr[i] + ",");
@@ -220,12 +230,15 @@ public class DijkstrasClass {
 
 
     
+
     public void printBoolArray(boolean[] arr) {
         for (int i = 0; i < arr.length; i++) {
             System.out.print(arr[i] + ",");
         }
         System.out.println();
     }
+
+
 
 
 

@@ -11,13 +11,7 @@
  **************************************************************/
 
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.HashSet;
 import java.util.Scanner;
-import java.util.Set;
 
 
 
@@ -43,21 +37,23 @@ public class Main {
         boolean contin = true; 
         Scanner sc = new Scanner(System.in);
         while (contin) { 
-            System.out.print("Test another post-to-post cost (y/n)? ");
+            System.out.print("\nTest another post-to-post cost (y/n)? ");
             String line = sc.nextLine(); 
             if ("n".equals(line.toLowerCase())) {
                 contin = false;
             }
             else if ("y".equals(line.toLowerCase())) {
-                System.out.print("Choose the from and to posts, seperated by a space: ");
-                line = sc.nextLine(); 
-                String[] uv = line.trim().split("\\s+");
-                u = Integer.parseInt(uv[0]);
-                v = Integer.parseInt(uv[1]);
-
-                riverInstance.printOptimalRouteInfo(u, v);
-
-                // System.out.println("u and v: " + u + " " + v);
+                try { 
+                    System.out.print("Choose the from and to posts, seperated by a space: ");
+                    line = sc.nextLine(); 
+                    String[] uv = line.trim().split("\\s+");
+                    u = Integer.parseInt(uv[0]);
+                    v = Integer.parseInt(uv[1]);
+                    
+                    riverInstance.printOptimalRouteInfo(u, v);
+                } catch (Exception e) { 
+                    System.out.println("Invalid post input: " + e);
+                }
             }
         }
 
