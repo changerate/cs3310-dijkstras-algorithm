@@ -23,7 +23,6 @@ public class Main {
      *********************************************************/
     public static void main(String[] args) {
         String filename = "inputA"; // class file 
-        int u = -1, v = -1;
         if (args.length != 0)
             // in the case where the user inputs just the filename
         filename = args[0];
@@ -32,10 +31,19 @@ public class Main {
         DijkstrasClass riverInstance = new DijkstrasClass(filename);
         riverInstance.printOptimalGraph();
         
-        //------------------------------------------
         // Now let the user test routes between posts 
+        testRoutes(riverInstance);
+        
+        System.out.println("\n-------------------------------------------------");
+    }
+
+
+    
+    static void testRoutes(DijkstrasClass riverInstance) { 
+        int u = -1, v = -1;
         boolean contin = true; 
         Scanner sc = new Scanner(System.in);
+        
         while (contin) { 
             System.out.print("\nTest another post-to-post cost (y/n)? ");
             String line = sc.nextLine(); 
@@ -56,8 +64,5 @@ public class Main {
                 }
             }
         }
-
-        
-        System.out.println("\n-------------------------------------------------");
     }
 }

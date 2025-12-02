@@ -5,7 +5,15 @@
  * Programming Assignment 3
  * ------------------------------------------------------------
  * File: DijkstrasClass.java
- * Purpose: TODO: _____________________________
+ * Purpose: this class loads a weighted directed 
+ * graph from an input file, constructs an adjacency list and 
+ * 2D distance matrix, and applies Dijkstra’s algorithm from 
+ * each source node to compute optimal shortest-path costs.
+ *
+ * The class stores both the optimal distances and parent 
+ * pointers for each run of Dijkstra’s algorithm, allowing 
+ * reconstruction and printing of optimal routes between 
+ * arbitrary node pairs.
  **************************************************************/
 
 
@@ -23,11 +31,11 @@ import java.util.PriorityQueue;
 
 
 public class DijkstrasClass {
+    private String filename; // holds the filename where the original 2D array graph comes from
+    private int numNodes; // holds the total number of nodes in the original 2D array graph
     private int[][] graph2DArray; // the 2d array to hold the distances between each node 
-    private String filename;
-    private int numNodes;
-    private List<List<Edge>> graph = new ArrayList<>();
-    private List<List<int[]>> distAndParents = new ArrayList<>();
+    private List<List<Edge>> graph = new ArrayList<>(); // holds the adjacency list version of the graph
+    private List<List<int[]>> distAndParents = new ArrayList<>(); // holds the distances and parent arrays for each source to v pairing
 
 
 
@@ -37,12 +45,18 @@ public class DijkstrasClass {
         readFile(); // initialize information needed 
         // printGraph();
         applyDijkstras();
-        // printDistAndParents();
     }
 
 
 
 
+    /*********************************************************
+     * Function applyDijkstras; applies Dijkstra’s algorithm 
+     * once for each node in the graph, treating that node as 
+     * the source. For every source node, the resulting shortest 
+     * distances and parent pointer arrays are stored in the 
+     * distAndParents list.
+     *********************************************************/
     private void applyDijkstras() { 
         // for each row (source node), use the Dijkstras Algorithm to find the optimal cost to the next node 
         for (int srcNode = 0; srcNode < numNodes-1; srcNode++) { 
@@ -51,6 +65,23 @@ public class DijkstrasClass {
         }
     }
 
+
+    
+    
+    /*********************************************************
+     * Function dijkstrasAlgorithm; runs Dijkstra’s shortest-
+     * path algorithm from a given source node using an adjacency
+     * list representation of the graph. It returns a list 
+     * containing two arrays: the optimal distance array and 
+     * the parent pointer array, where parent[v] represents the
+     * previous node on the shortest path to v.
+     *
+     * @param srcNode the starting node from which shortest paths
+     *        are computed
+     * @return a List<int[]> containing:
+     *         index 0 → dist[]   optimal distances
+     *         index 1 → parent[] predecessor nodes on paths
+     *********************************************************/
     private List<int[]> dijkstrasAlgorithm(int srcNode) {
         Node src = new Node(srcNode, 0);        // make a new Node object with the srcNode integer
         int[] dist = new int[numNodes];             // shortest distances found so far
@@ -96,6 +127,20 @@ public class DijkstrasClass {
 
 
 
+    /*********************************************************
+     * Function readFile; reads the graph data from the input 
+     * file specified by filename. The first line contains the 
+     * number of nodes, and each subsequent line contains the 
+     * upper-triangular portion of the adjacency matrix. The 
+     * method initializes both a 2D distance matrix and an 
+     * adjacency list representation of the graph.
+     *
+     * File format:
+     *   Line 1: numNodes
+     *   Line 2+: distances from node i to all nodes j ≥ i
+     *
+     * @throws IOException if the input file cannot be read
+     *********************************************************/
     private void readFile() {
         int row = 0;
 
@@ -136,6 +181,16 @@ public class DijkstrasClass {
 
 
 
+    /*********************************************************
+     * Function printOptimalRouteInfo; prints both the optimal 
+     * distance as an integer and the full shortest path from 
+     * source node u to destination node v. This method 
+     * reconstructs the path using the stored parent pointers
+     * and prints the path in order from source to destination.
+     *
+     * @param u the source node
+     * @param v the destination node
+     *********************************************************/
     public void printOptimalRouteInfo(int u, int v) { 
         if (u > numNodes || v > numNodes) {
             System.out.println("u or v is not a node.");
@@ -172,9 +227,17 @@ public class DijkstrasClass {
 
 
 
-    //***************************************************************************/
+    //=====================================================================
+    //=====================================================================
     // UTILITIES 
-    //***************************************************************************/
+    //=====================================================================
+    //=====================================================================
+
+    /*********************************************************
+     * Function printGraph; prints the adjacency list 
+     * representation of the graph, showing each source node and 
+     * its outgoing edges with corresponding weights.
+     *********************************************************/
     public void printGraph() { 
         for (int src = 0; src < numNodes; src++) {
             System.out.println("The list for source " + Integer.toString(src) + ": ");
@@ -185,6 +248,13 @@ public class DijkstrasClass {
     }
 
 
+    /*********************************************************
+     * Function printOptimalGraph; prints a formatted matrix of 
+     * optimal distances produced by Dijkstra’s algorithm. Only 
+     * the upper-triangular portion is displayed (excluding 0 
+     * and infinity entries) to reflect the structure of the 
+     * input graph.
+     *********************************************************/
     public void printOptimalGraph() { 
         System.out.println("\nOptimal Cost Matrix");
 
@@ -217,8 +287,12 @@ public class DijkstrasClass {
     }
 
 
-
-
+    /*********************************************************
+     * Function printIntArray; prints the contents of an integer 
+     * array in comma-separated format.
+     *
+     * @param arr the array to print
+     *********************************************************/
     public void printIntArray(int[] arr) {
         for (int i = 0; i < arr.length; i++) {
             System.out.print(arr[i] + ",");
@@ -227,8 +301,12 @@ public class DijkstrasClass {
     }
 
 
-
-
+    /*********************************************************
+     * Function printBoolArray; prints the contents of a boolean 
+     * array in comma-separated format.
+     *
+     * @param arr the boolean array to print
+     *********************************************************/
     public void printBoolArray(boolean[] arr) {
         for (int i = 0; i < arr.length; i++) {
             System.out.print(arr[i] + ",");
@@ -237,38 +315,27 @@ public class DijkstrasClass {
     }
 
 
-
-
-    public void printDistAndParents() {
-        System.out.println("----------------------------");
-
-        for (int i = 0; i < distAndParents.size(); i++) {
-            System.out.println("Source node " + i + ":");
-            List<int[]> innerList = distAndParents.get(i);
-            for (int j = 0; j < innerList.size(); j++) {
-                int[] arr = innerList.get(j);
-
-                if (j == 0)
-                    System.out.println("\tOptimal dist:   " + Arrays.toString(arr));
-                else
-                    System.out.println("\tParents source: " + Arrays.toString(arr));
-            }
-            System.out.println();
-        }
-
-        System.out.println("----------------------------");
-    }
-
-
-
-
-    //***************************************************************************/
+    //=====================================================================
+    //=====================================================================
     // SETTERS 
-    //***************************************************************************/
+    //=====================================================================
+    //=====================================================================
+    /*********************************************************
+     * Function setFilename; stores the input filename used to
+     * read the graph data.
+     *
+     * @param inputFilename the name of the file to load
+     *********************************************************/
     private void setFilename(String inputFilename) { 
         filename = inputFilename;
     }
 
+    /*********************************************************
+     * Function setNumNodes; records the number of nodes in the 
+     * graph as extracted from the input file.
+     *
+     * @param inputNum number of nodes in the graph
+     *********************************************************/
     private void setNumNodes(int inputNum) { 
         numNodes = inputNum;
     }
