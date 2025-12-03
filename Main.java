@@ -36,11 +36,12 @@ public class Main {
         filename = args[0];
 
 
-        DijkstrasClass riverInstance = new DijkstrasClass(filename);
-        riverInstance.printOptimalGraph();
+        // DijkstrasClass riverInstance = new DijkstrasClass(filename);
+        FloydsClass riverInstance = new FloydsClass(filename);
+        // riverInstance.printOptimalGraph();
         
         // Now let the user test routes between posts 
-        testRoutes(riverInstance);
+        // testRoutes(riverInstance);
         
         System.out.println("\n-------------------------------------------------");
     }
