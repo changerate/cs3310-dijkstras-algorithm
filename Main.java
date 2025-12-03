@@ -6,8 +6,10 @@
  * ------------------------------------------------------------
  * File: Main.java
  * Purpose: This is the entry point of the program. 
- * We utilize the _______________ class in order to demonstrate 
- * _________________________________.
+ * I utilize the DijkstrasClass class in order to demonstrate 
+ * computing optimal post-to-post costs on a river graph using 
+ * Dijkstra's shortest-path algorithm and to allow interactive 
+ * testing of routes between posts. 
  **************************************************************/
 
 
@@ -17,9 +19,15 @@ import java.util.Scanner;
 
 public class Main {
     /*********************************************************
-     * Function: main; run this function in order to see the 
-     * ________________________________ in action. 
-     * @param args
+     * Function main; run this function to execute the river
+     * routing program. The method reads an optional input
+     * filename from the command line, constructs a 
+     * DijkstrasClass instance using that file, prints the 
+     * optimal cost matrix, and then enters an interactive 
+     * loop where the user can test post-to-post routes.
+     * 
+     * @param args optional command-line arguments; if args[0]
+     *             is present, it is used as the input filename
      *********************************************************/
     public static void main(String[] args) {
         String filename = "inputA"; // class file 
@@ -38,12 +46,23 @@ public class Main {
     }
 
 
-    
+    /*********************************************************
+     * Function testRoutes; repeatedly prompts the user to 
+     * test optimal routes between pairs of posts. When the 
+     * user chooses to continue, they enter a pair of post 
+     * indices (u and v), and this function calls 
+     * printOptimalRouteInfo on the provided DijkstrasClass 
+     * instance to display the optimal distance and path.
+     * Input is validated, and invalid entries are reported.
+     * 
+     * @param riverInstance a DijkstrasClass object that has 
+     *        already computed all shortest-path information
+     *********************************************************/
     static void testRoutes(DijkstrasClass riverInstance) { 
         int u = -1, v = -1;
         boolean contin = true; 
         Scanner sc = new Scanner(System.in);
-        
+
         while (contin) { 
             System.out.print("\nTest another post-to-post cost (y/n)? ");
             String line = sc.nextLine(); 
