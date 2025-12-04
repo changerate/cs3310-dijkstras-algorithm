@@ -19,8 +19,6 @@ import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
-import java.util.LinkedList;
-import java.util.Queue;
 
 
 
@@ -31,68 +29,54 @@ public class FloydsClass {
     private int[][] graphMatrix; // the 2d array representing the actual graph
     private int[][] shortestPaths; // the 2d array representing the optimal paths 
     private int[][] parentsMatrix; // the 2d array representing the parents for path reconstruction
+    private static final int INF = 1_000_000_000; // "Infinity" (large enough)
 
 
 
 
     public FloydsClass(String inputFilename) { 
-        System.out.println(); //TODO: DELETE
-
         setFilename(inputFilename);
         readFile(); // initialize information needed 
-
-        // System.out.println("The initialized parent matrix");
-        // printMatrix(parentsMatrix);
-
         floydsAlgorithm();
-        
-        System.out.println("The parent matrix after floyd's");
-        printMatrix(parentsMatrix);
-        // System.out.println("The graphMatrix after floyd's");
-        // printMatrix(graphMatrix);
-        System.out.println("The shortestPaths after floyd's");
-        printMatrix(shortestPaths);
-
-        System.out.println("The path");
-        for (int i = 0; i < parentsMatrix.length; i++) { 
-            for (int j = 0; j < parentsMatrix.length; j++) { 
-                displayPath(i, j);
-            }
-        }
-        
     }
 
 
 
-    
 
     private void floydsAlgorithm() {
-        int[][] shortestPaths = deepCopy(graphMatrix);
-        
-        for (int k = 0; k < graphMatrix.length; k++) { 
-            for (int i = 0; i < graphMatrix.length; i++) { 
-                for (int j = 0; j < graphMatrix.length; j++) {
-                    int ijDist = shortestPaths[i][j];
-                    int ikDist = shortestPaths[i][k];
-                    int kjDist = shortestPaths[k][j];
+        int[][] dist = deepCopy(graphMatrix);
+        int n = dist.length;
 
-                    if (ikDist >= 0 || kjDist >= 0) { 
+        // Initialize parentsMatrix
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
 
-                        if (ijDist < ikDist + kjDist) {
-                            shortestPaths[i][j] = ijDist;
-                            parentsMatrix[i][j] = j;
-                        } else { 
-                            shortestPaths[i][j] = ikDist + kjDist;
+                if (dist[i][j] != -1 && i != j) {
+                    // There is a direct edge i -> j, so the next node from i to j is j
+                    parentsMatrix[i][j] = j;
+                } else {
+                    // No known path yet
+                    parentsMatrix[i][j] = -1;
+                }
+            }
+        }
 
-                            parentsMatrix[i][j] = k;
-                            parentsMatrix[k][j] = j;
-                        }
+        for (int k = 0; k < n; k++) {
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    // Skip if i can't reach k or k can't reach j
+                    if (dist[i][k] == -1 || dist[k][j] == -1) continue;
+
+                    int ikjDist = dist[i][k] + dist[k][j];
+                    if (ikjDist < dist[i][j]) {
+                        dist[i][j] = ikjDist;
+                        parentsMatrix[i][j] = parentsMatrix[i][k];
                     }
                 }
             }
         }
-        
-        setShortestPaths(shortestPaths);
+
+        setShortestPaths(dist);
     }
 
 
