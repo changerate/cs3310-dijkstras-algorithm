@@ -5,8 +5,8 @@
  * Programming Assignment 3
  * ------------------------------------------------------------
  * File: FloydsClass.java
- * TODO: FILL OUT THE COMMENTS TO FIT FLOYDS
- * Purpose: 
+ * Purpose: This class holds the logic needed to find the optimal 
+ * paths from each node to every other node.
  **************************************************************/
 
 
@@ -100,7 +100,14 @@ public class FloydsClass {
      * file specified by 'filename'. The first line contains the
      * number of nodes, and subsequent lines contain the upper
      * triangular distance entries of the adjacency matrix.
-     *
+     * 
+     * WARNING: 
+     * This method only works on graphs that follow this structure: 
+        10 50  5 12 27 
+           23 16 38 44
+              30 15 33
+                 33 43
+                    12
      * This method:
      *   - Initializes graphMatrix and parentsMatrix
      *   - Fills matrix entries with either a distance or -1
